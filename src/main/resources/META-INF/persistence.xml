@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
+             version="3.1">
+    <persistence-unit name="my_pu" transaction-type="JTA">
+        <jta-data-source>jdbc/maria</jta-data-source>
+        <class>com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.Product</class>
+<!--        <exclude-unlisted-classes>false</exclude-unlisted-classes>-->
+<!--        <properties>-->
+<!--            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>-->
+<!--            <property name="eclipselink.ddl-generation.output-mode" value="both"/>-->
+<!--        </properties>-->
+    </persistence-unit>
+
+    <persistence-unit name="mariadb">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.dialect" value="org.hibernate.dialect.MariaDBDialect"/>
+            <property name="hibernate.connection.url" value="jdbc:mariadb://localhost:3306/mydb2"/>
+            <property name="hibernate.connection.username" value="root"/>
+            <property name="hibernate.connection.password" value="root"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
