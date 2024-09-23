@@ -39,6 +39,7 @@ import java.util.Map;
 @WebServlet(name = "Controller", value = "/controller")
 public class Controller extends HttpServlet {
     private Cart cart;
+    private static double sum = 0d;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -190,10 +191,7 @@ public class Controller extends HttpServlet {
                 if (cart_obj == null) {
                     out.println("<h1>Empty Shopping Cart</h1>");
                 } else {
-//                    String html = "<table border=\"1\" cellpadding=\"0\" cellspacing=\"0\" width=\"90%\">";
-//                    html += "<tr><td>ID</td> <td>Name</td> <td>Quanlity</td> <td>Price</td> <td>amount</td></tr>";
-
-                    double sum = 0d;
+                    sum = 0d;
 
                     cart = (Cart) cart_obj;
                     for (CartItem cItem : cart.getCart()) {
@@ -240,21 +238,11 @@ public class Controller extends HttpServlet {
                         }
                         map.put(cItem.getPid(), cItem.getQuantity());
                         session_viewCart.setAttribute("items_map", map);
-
-//                        html += "<tr>";
-//                        html += "<td>" + product_2cart.getProductId() + "</td>";
-//                        html += "<td>" + product_2cart.getName() + "</td>";
-//                        html += "<td>" + cItem.getQuantity() + "</td>";
-//                        html += "<td>" + productPrice_2cart.getPrice() + "</td>";
-//                        html += "<td>" + amount + "</td>";
-//                        html += "</tr>";
                     }
                     session_viewCart.setAttribute("productsInCart", productsInCart);
                     session_viewCart.setAttribute("productPricesInCart", productPricesInCart);
                     session_viewCart.setAttribute("sum", sum);
                     request.getRequestDispatcher("/view/cart.jsp").forward(request, response);
-//                    out.println(html);
-//                    out.println("<h2>Total amount: " + sum + "</h2>");
                 }
                 break;
             case "deleteFromCart":

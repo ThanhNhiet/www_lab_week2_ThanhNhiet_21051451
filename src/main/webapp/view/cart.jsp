@@ -31,15 +31,20 @@
 //            total += p.getPrice() * p.getQuantity();
     %>
     <tr>
-        <td><%= p.getProductId() %></td>
-        <td><%= p.getName() %></td>
-        <td><%= items_map.get(p.getProductId()).longValue() %></td>
+        <td><%= p.getProductId() %>
+        </td>
+        <td><%= p.getName() %>
+        </td>
+        <td><%= items_map.get(p.getProductId()).longValue() %>
+        </td>
         <%
             for (ProductPrice pp : ppInC) {
                 if (pp.getProduct().getProductId() == p.getProductId()) {
         %>
-        <td><%= pp.getPrice() %></td>
-        <td><%= pp.getPrice() * items_map.get(p.getProductId()).longValue() %></td>
+        <td><%= pp.getPrice() %>
+        </td>
+        <td><%= pp.getPrice() * items_map.get(p.getProductId()).longValue() %>
+        </td>
         <%
                 }
             }
@@ -57,6 +62,23 @@
         }
     %>
 </table>
-<h2>Total: <%= total %></h2>
+<h3>Total: <%= total %></h3>
+<br>
+
+<div>
+    <h2>Payment: </h2>
+    <form action="controller" method="post">
+        <input type="hidden" name="action" value="pay">
+        <input type="number" name="money" required placeholder="money">
+        <input type="submit" value="Pay">
+    </form>
+</div>
+
+<div>
+    <h2>Change: </h2>
+    <form>
+        <input id="payBack" type="text" readonly>
+    </form>
+</div>
 </body>
 </html>

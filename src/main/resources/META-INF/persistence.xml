@@ -5,8 +5,8 @@
              version="3.1">
     <persistence-unit name="my_pu" transaction-type="JTA">
         <jta-data-source>jdbc/maria</jta-data-source>
-        <class>com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.Product</class>
-<!--        <exclude-unlisted-classes>false</exclude-unlisted-classes>-->
+<!--        <class>com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.Product</class>-->
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
 <!--        <properties>-->
 <!--            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>-->
 <!--            <property name="eclipselink.ddl-generation.output-mode" value="both"/>-->
