@@ -69,7 +69,12 @@
     <h2>Payment: </h2>
     <form action="controller" method="post">
         <input type="hidden" name="action" value="pay">
-        <input type="number" name="money" required placeholder="money">
+        <label>ID Customer:</label> <br>
+        <input type="text" name="idCus" required> <br>
+        <label>ID Employee:</label> <br>
+        <input type="text" name="idEmp" required> <br>
+        <label>Money:</label> <br>
+        <input type="number" name="money" required> <br>
         <input type="submit" value="Pay">
     </form>
 </div>

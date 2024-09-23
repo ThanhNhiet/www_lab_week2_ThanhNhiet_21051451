@@ -28,9 +28,6 @@ import org.apache.hc.core5.http.io.entity.StringEntity;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
-import java.nio.channels.ScatteringByteChannel;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -302,6 +299,7 @@ public class Controller extends HttpServlet {
                         if (productPrice_delete != null) {
                             double amount = productPrice_delete.getPrice() * cItem.getQuantity();
                             sum_delete += amount;
+                            sum = sum_delete;
                         }
                     }
 
@@ -316,7 +314,14 @@ public class Controller extends HttpServlet {
                 }
                 break;
             case "pay":
-
+                String idCus = request.getParameter("idCus");
+                String idEmp = request.getParameter("idEmp");
+                String money = request.getParameter("money");
+                Double moneyD = Double.parseDouble(money);
+                PrintWriter outPay = response.getWriter();
+                if(moneyD < sum){
+                    outPay.println("<h1>Not enough money!</h1>");
+                }
                 break;
             default:
                 request.getRequestDispatcher("/index.jsp").forward(request, response);

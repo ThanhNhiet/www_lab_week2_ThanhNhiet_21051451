@@ -1,6 +1,6 @@
 package com.iuh.week02_lab_phamlethanhnhiet_21051451.frontend.models;
 
-import com.iuh.week02_lab_phamlethanhnhiet_21051451.frontend.dtos.entities.Customer;
+import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.Customer;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
