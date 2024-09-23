@@ -315,6 +315,9 @@ public class Controller extends HttpServlet {
                     request.getRequestDispatcher("/view/cart.jsp").forward(request, response);
                 }
                 break;
+            case "pay":
+
+                break;
             default:
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
