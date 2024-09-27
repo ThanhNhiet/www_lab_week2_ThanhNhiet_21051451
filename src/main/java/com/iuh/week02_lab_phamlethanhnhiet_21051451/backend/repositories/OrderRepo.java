@@ -11,10 +11,11 @@ public class OrderRepo {
 
     public void save(Order o) {
         em.persist(o);
+        em.flush();
     }
 
-    public Order find(Long id) {
-        return em.find(Order.class, id);
+    public Order findLastOrder() {
+        return em.createQuery("SELECT o FROM Order o ORDER BY o.orderId DESC", Order.class).setMaxResults(1).getSingleResult();
     }
 
     public void saveOD(OrderDetail od) {

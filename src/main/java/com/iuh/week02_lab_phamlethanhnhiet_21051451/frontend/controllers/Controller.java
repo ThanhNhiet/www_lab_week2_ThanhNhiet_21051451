@@ -3,11 +3,12 @@ package com.iuh.week02_lab_phamlethanhnhiet_21051451.frontend.controllers;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.config.GsonConfig;
-import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.Cart;
-import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.CartItem;
-import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.Product;
-import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.ProductPrice;
+import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.*;
 import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.enums.ProductStatus;
+import com.iuh.week02_lab_phamlethanhnhiet_21051451.frontend.models.CustomerModel;
+import com.iuh.week02_lab_phamlethanhnhiet_21051451.frontend.models.EmployeeModel;
+import com.iuh.week02_lab_phamlethanhnhiet_21051451.frontend.models.OrderModel;
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,6 +29,7 @@ import org.apache.hc.core5.http.io.entity.StringEntity;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,13 @@ import java.util.Map;
 public class Controller extends HttpServlet {
     private Cart cart;
     private static double sum = 0d;
+
+    @Inject
+    private CustomerModel customerModel;
+    @Inject
+    private EmployeeModel employeeModel;
+    @Inject
+    private OrderModel orderModel;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -316,12 +325,67 @@ public class Controller extends HttpServlet {
             case "pay":
                 String idCus = request.getParameter("idCus");
                 String idEmp = request.getParameter("idEmp");
+                String note = request.getParameter("note");
                 String money = request.getParameter("money");
-                Double moneyD = Double.parseDouble(money);
+                double moneyD = Double.parseDouble(money);
                 PrintWriter outPay = response.getWriter();
                 if(moneyD < sum){
                     outPay.println("<h1>Not enough money!</h1>");
+                    break;
                 }
+
+                double change = moneyD - sum;
+                Customer cus = customerModel.findCustomerById(Long.parseLong(idCus));
+                Employee emp = employeeModel.findEmployeeById(Long.parseLong(idEmp));
+                LocalDateTime orderDate = LocalDateTime.now();
+                Order order = new Order(orderDate, cus, emp);
+                try{
+                    orderModel.createOrder(order);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+                Order lastOrder = orderModel.findLastOrder();
+
+                //Lay danh sach san pham trong gio hang
+                HttpSession session_pay = request.getSession(true);
+                List<Product> productsInCart_pay = (List<Product>) session_pay.getAttribute("productsInCart");
+                //lay so luong tung san pham trong gio hang
+                Map<Long, Long> items_map_pay = (Map<Long, Long>) session_pay.getAttribute("items_map");
+                //lay gia tung san pham trong gio hang
+                List<ProductPrice> productPricesInCart_pay = (List<ProductPrice>) session_pay.getAttribute("productPricesInCart");
+
+                //Tao ra doi tuong OrderDetail
+                for (Product p : productsInCart_pay) {
+                    long quantity = items_map_pay.get(p.getProductId()).longValue();
+                    double price = 0d;
+                    for (ProductPrice pp : productPricesInCart_pay) {
+                        if (pp.getProduct().getProductId() == p.getProductId()) {
+                            price = pp.getPrice();
+                        }
+                    }
+                    OrderDetail od = new OrderDetail(lastOrder, p, price, quantity, note);
+                    try{
+                        orderModel.createOrderDetail(od);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                HttpSession session_change = request.getSession(true);
+                session_change.setAttribute("change", change);
+
+                //Xoa gio hang
+                session_pay.removeAttribute("cart");
+                session_pay.removeAttribute("productsInCart");
+                session_pay.removeAttribute("productPricesInCart");
+                session_pay.removeAttribute("items_map");
+                session_pay.removeAttribute("sum");
+
+                outPay.println("<h1>Order id: "+ lastOrder.getOrderId() +"</h1>");
+                outPay.println("<h1>Payment successful!</h1>");
+                outPay.println("<h1>Change: " + change + "</h1>");
+
                 break;
             default:
                 request.getRequestDispatcher("/index.jsp").forward(request, response);

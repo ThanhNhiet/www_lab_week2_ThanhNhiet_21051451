@@ -17,10 +17,10 @@ public class OrderResource {
     private OrderLocal orderLocal;
 
     @GET
-    @Path("/{id}")
-    public Response getOrderById(@PathParam("id") Long id) {
+    @Path("/last")
+    public Response getLastOrder() {
         Response.ResponseBuilder builder = Response.ok();
-        builder.entity(orderLocal.findOrder(id));
+        builder.entity(orderLocal.findLastOrder());
         return builder.build();
     }
 

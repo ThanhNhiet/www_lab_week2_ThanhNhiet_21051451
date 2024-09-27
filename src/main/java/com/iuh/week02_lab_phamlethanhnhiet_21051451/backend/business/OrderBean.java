@@ -21,8 +21,8 @@ public class OrderBean implements OrderLocal{
 
     @Override
     @Transactional
-    public Order findOrder(Long id) {
-        return orderRepo.find(id);
+    public Order findLastOrder() {
+        return orderRepo.findLastOrder();
     }
 
     @Override

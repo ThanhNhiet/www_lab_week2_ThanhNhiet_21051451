@@ -73,16 +73,11 @@
         <input type="text" name="idCus" required> <br>
         <label>ID Employee:</label> <br>
         <input type="text" name="idEmp" required> <br>
+        <label>Note:</label> <br>
+        <input type="text" name="note"> <br>
         <label>Money:</label> <br>
         <input type="number" name="money" required> <br>
         <input type="submit" value="Pay">
-    </form>
-</div>
-
-<div>
-    <h2>Change: </h2>
-    <form>
-        <input id="payBack" type="text" readonly>
     </form>
 </div>
 </body>
