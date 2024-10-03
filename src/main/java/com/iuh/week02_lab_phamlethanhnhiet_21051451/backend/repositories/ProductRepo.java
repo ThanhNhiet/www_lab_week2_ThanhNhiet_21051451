@@ -1,6 +1,7 @@
 package com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.repositories;
 
 import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.Product;
+import com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.enums.ProductStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -29,6 +30,12 @@ public class ProductRepo {
 
     public List<Product> findAll() {
         return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
+    }
+
+    public List<Product> findAllActive() {
+        return em.createQuery("SELECT p FROM Product p WHERE p.status = :status", Product.class)
+                .setParameter("status", ProductStatus.ACTIVE)
+                .getResultList();
     }
 
     public List<Product> findByName(String name) {

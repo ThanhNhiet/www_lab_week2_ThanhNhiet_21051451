@@ -15,11 +15,16 @@ public class ProductResourse {
     @Inject
     private ProductBO productBO;
 
+//    @GET
+//    public Response getAllProducts() {
+//        Response.ResponseBuilder builder = Response.ok();
+//        builder.entity(productBO.findAllProducts());
+//        return builder.build();
+//    }
+
     @GET
     public Response getAllProducts() {
-        Response.ResponseBuilder builder = Response.ok();
-        builder.entity(productBO.findAllProducts());
-        return builder.build();
+        return Response.ok(productBO.getProducts()).build();
     }
 
     @GET

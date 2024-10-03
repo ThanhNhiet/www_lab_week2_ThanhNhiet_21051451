@@ -1,7 +1,5 @@
-<%@ page import="com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.Product" %>
+<%@ page import="com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.dtos.ProductDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.iuh.week02_lab_phamlethanhnhiet_21051451.backend.entities.ProductPrice" %>
-<%@ page import="java.util.Optional" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -261,13 +259,12 @@
     <tbody>
     <%
         // Lấy danh sách sản phẩm từ request
-        List<Product> products = (List<Product>) request.getAttribute("products");
-        List<ProductPrice> productPrices = (List<ProductPrice>) request.getAttribute("productPrices");
+        List<ProductDTO> products = (List<ProductDTO>) request.getAttribute("products");
         if (products != null && !products.isEmpty()) {
-            for (Product product : products) {
+            for (ProductDTO product : products) {
     %>
-    <tr id="row-<%=product.getProductId()%>">
-        <td><%= product.getProductId() %>
+    <tr id="row-<%=product.getId()%>">
+        <td><%= product.getId() %>
         </td>
         <td><%= product.getName() %>
         </td>
@@ -280,19 +277,12 @@
         <td><%= product.getUnit() %>
         </td>
         <%
-            boolean priceFound = false; // Biến cờ để kiểm tra nếu tìm thấy giá
-
-            for (ProductPrice productPrice : productPrices) {
-                if (productPrice.getProduct().getProductId() == product.getProductId()) {
-                    priceFound = true;
+            if (product.getPrice() != 0) {
         %>
-        <td><%= productPrice.getPrice() + "d" %></td>
+        <td><%= product.getPrice() + "d" %></td>
         <%
-                    break; // Thoát vòng lặp khi đã tìm thấy giá
-                }
             }
-            // Nếu không tìm thấy giá, hiển thị giá trị mặc định
-            if (!priceFound) {
+            else if (product.getPrice() == 0) {
         %>
         <td>N/A</td>
         <%
@@ -301,7 +291,7 @@
 
         <td>
             <button type="button"
-                    onclick="updateAccount('<%=product.getProductId()%>', '<%=product.getName()%>',
+                    onclick="updateAccount('<%=product.getId()%>', '<%=product.getName()%>',
                             '<%=product.getDescription()%>',
                             '<%=product.getManufacturer()%>', '<%=product.getStatus()%>',
                             '<%=product.getUnit()%>')">
@@ -310,17 +300,16 @@
 
             <form method="post" action="controller" style="display:inline;">
                 <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="id" value="<%=product.getProductId()%>">
+                <input type="hidden" name="id" value="<%=product.getId()%>">
                 <button type="submit">Delete</button>
             </form>
 
             <%
-                // Nếu sản phẩm có giá, hiển thị nút thêm vào giỏ hàng
-                if (priceFound) {
+                if (product.getPrice() != 0) {
             %>
             <form method="post" action="controller" style="display:inline;">
                 <input type="hidden" name="action" value="add2Cart">
-                <input type="hidden" name="id" value="<%=product.getProductId()%>">
+                <input type="hidden" name="id" value="<%=product.getId()%>">
                 <button type="submit">Add to cart</button>
             </form>
             <%

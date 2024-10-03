@@ -24,4 +24,10 @@ public class ProductPriceRepo {
     public void update(ProductPrice productPrice) {
         em.merge(productPrice);
     }
+
+    //    public ProductPrice findActivePriceOfProduct(Long id) {
+//        return  em.createQuery("select p from ProductPrice p where p.product.id= :id and p.=1", ProductPrice.class)
+//                .setParameter("id",id)
+//                .getSingleResult();
+//    }
 }
